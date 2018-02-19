@@ -16,10 +16,25 @@ class BusinessCell: UITableViewCell {
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var reviewsLabel: UILabel!
     @IBOutlet weak var tagsLabel: UILabel!
+    @IBOutlet weak var addressLabel: UILabel!
+    
+    var business: Business! {
+        didSet {
+            nameLabel.text = business.name
+            posterImage.setImageWith(business.imageURL!)
+            tagsLabel.text = business.categories
+            addressLabel.text = business.address
+            ratingImage.setImageWith(business.ratingImageURL!)
+            reviewsLabel.text = "\(business.reviewCount!) Reviews"
+            distanceLabel.text = business.distance
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        posterImage.layer.cornerRadius = 5
+        posterImage.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
