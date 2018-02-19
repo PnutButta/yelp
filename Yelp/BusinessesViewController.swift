@@ -27,7 +27,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         navigationItem.titleView = searchBar
         searchBar.showsCancelButton = false
     
-        /*
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
@@ -39,30 +38,38 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
             }
             
-            }*/
-        
-        Business.searchWithTerm(term: "Restaurants", sort: .distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: Error!) -> Void in
-            
-            self.businesses = businesses
-            self.tableView.reloadData()
-            if let businesses = businesses {
-                for business in businesses {
-                    print(business.name!)
-                    print(business.address!)
-                }
-            }
-        }
-        
+        })
+
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if let searchText = searchBar.text {
+       if searchText.isEmpty {
+            Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
+                
+                self.businesses = businesses
+                self.tableView.reloadData()
+                if let businesses = businesses {
+                    for business in businesses {
+                        print(business.name!)
+                        print(business.address!)
+                    }
+                }
+                
+            })
+        } else {
             businesses = searchText.isEmpty ? businesses : businesses.filter({ (data) -> Bool in
                 return (data.name?.lowercased().contains(searchText.lowercased()))!
             })
-            
-            tableView.reloadData()
+                tableView.reloadData()
         }
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        searchBar.endEditing(true)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
     }
 
     
